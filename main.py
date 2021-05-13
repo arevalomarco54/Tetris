@@ -290,11 +290,16 @@ def draw_grid(lgrid, dem, margin, cor):
       x,y = cor
       org_x = x
       nrows, ncols = lgrid.shape
-      bsl = (dem[1] - (margin*nrows))/nrows
+      bsl = int((dem[1] - (margin*nrows))/nrows)
       for r in range(nrows):
             for c in range(ncols):
-                  color = shape_codes[lgrid[r][c]][1]
-                  pygame.draw.rect(win, color, (x,y, bsl, bsl), border_radius =2)
+                  if lgrid[r][c] == 0:
+                        color = shape_codes[lgrid[r][c]][1]
+                        pygame.draw.rect(win, color, (x,y, bsl, bsl), border_radius =2)
+                  else:
+                        img = shape_codes[lgrid[r][c]][1]
+                        img=pygame.transform.scale(img, (bsl, bsl))
+                        win.blit(img, (x,y))
                   x += bsl+margin
             x =org_x
             y +=bsl+margin
@@ -324,7 +329,7 @@ def create_screen():
             draw_shape(shapes[i][0],lrows, lcols, upcoming_grid, collision = False)
             lrows +=3
 
-      draw_grid(upcoming_grid, (width_ex,int(width_ex*2)), 0.75, (width,int(2/7 * height)))
+      draw_grid(upcoming_grid, (width_ex,int(width_ex*2)), 1, (width,int(2/7 * height)))
 
       
 
@@ -360,8 +365,8 @@ def game_over():
             quit_button_pos = (int(width* 1/5), int(height * 3/4),50,25)
             restart_button_pos = (int(width * 3/5),int(height *3/4),50,25)
             pygame.draw.rect(win, black, (int(width/10), int(height/10), int(width * 4/5), int(height*4/5)), border_radius = 4)
-            pygame.draw.rect(win, red, quit_button_pos, border_radius = 2)
-            pygame.draw.rect(win, purple, restart_button_pos, border_radius = 2 )
+            pygame.draw.rect(win, bkgrd_black, quit_button_pos, border_radius = 2)
+            pygame.draw.rect(win, bkgrd_black, restart_button_pos, border_radius = 2 )
             game_over_text = game_font.render("Game Over!!!", True, white)
             over_score_text = game_font.render(f'Score: {score}', True, white)
             quit_text = small_game_font.render('Quit', True, white)
@@ -445,32 +450,13 @@ def game_loop():
             create_screen()
             pygame.display.update()
 
+
+
 #Defines tuples for the color of the pieces and background
 black = (0,0,0)
 bkgrd_black =(25, 25, 25)
 white = (254,254,254)
-turquoise =(175,238,238)
-purple = (177, 156, 217)
-orange = (255,140,0)
-yellow = (255,255,0)
-green = (0,254,0)
-blue = (0,0,254)
-red=(254,0,0)
 bkgrd_grey = (54,54,54)
-
-
-
-#Defines the color, and shape for each number
-shape_codes = {
-            0:(None,bkgrd_black),
-            1:(s, green),
-            2:(z,red),
-            3:(l,turquoise),
-            4:(o, yellow),
-            5:(j, blue),
-            6:(L, orange),
-            7:(t, purple)
-      }
 
 
 
@@ -482,20 +468,52 @@ upcoming_grid = np.zeros((10,5), dtype='int8')
 
 
 
-
-#creates an intial 4 shapes to start off the game
-shapes = [new_shape(), new_shape(), new_shape(), new_shape()]
-
-
-
-#Initiates the window, sets window size and title, and calls the game loop
-height = 600
-width_ex = int(height* 1/4)
-width = int(height* 1/2)
+#Initiates the window
 pygame.init()
+
+
+
+# colors/images
+red = pygame.image.load(f'tetris/Sprites/red.png')
+blue = pygame.image.load(f'tetris/Sprites/blue.png')
+green = pygame.image.load(f'tetris/Sprites/green.png')
+orange = pygame.image.load(f'tetris/Sprites/orange.png')
+purple = pygame.image.load(f'tetris/Sprites/purple.png')
+yellow = pygame.image.load(f'tetris/Sprites/yellow.png')
+turquoise = pygame.image.load(f'tetris/Sprites/light_blue.png')
+
+
+
+#Defines the color, and shape for each number
+shape_codes = {
+            0:(None,bkgrd_black),
+            1:(s, green.copy()),
+            2:(z,red.copy()),
+            3:(l,turquoise.copy()),
+            4:(o, yellow.copy()),
+            5:(j, blue.copy()),
+            6:(L, orange.copy()),
+            7:(t, purple.copy())
+      }
+
+
+
+#creates original 4 shapes      
+shapes = [new_shape(), new_shape(), new_shape(), new_shape()] 
+
+
+
+#defines fonts and dm
+height = 600
+width_ex = int(height* 1/5)
+width = int(height* 1/2)
 game_font = pygame.font.Font(f"tetris/Tetris-Font/Tetris.ttf", int(0.08*width))
 small_game_font=pygame.font.Font(f'tetris/Tetris-Font/Tetris.ttf', int(0.04*width))
-win = pygame.display.set_mode((int(height/2 + width_ex), height))
+win = pygame.display.set_mode((int(width + width_ex), height))
+
+
+
+#sets window size and title, and calls the game loop
 pygame.display.set_caption("Tetris")
 game_loop()
 pygame.quit()
