@@ -310,11 +310,11 @@ def create_screen():
 
       pygame.draw.rect(win, black, (width, 0, width_ex, height), border_radius = 2)
 
-      score_text = game_font.render(f'Score:{score}', True, white)
-      win.blit(score_text, (int(width+ .05*width),0))
+      score_text = game_font.render(f'Score: {score}', True, white)
+      win.blit(score_text, (width ,0))
       
       upcoming_text = game_font.render(f'Upcoming', True, white)
-      win.blit(upcoming_text, (int(width+ .05*width),int(height/7)))
+      win.blit(upcoming_text, (width,int(height/7)))
 
       pygame.draw.rect(win, bkgrd_grey, (width, int(2/7 * height), width_ex, width_ex*2), border_radius = 2)
       lrows = np.array([0,4])
@@ -363,7 +363,7 @@ def game_over():
             pygame.draw.rect(win, red, quit_button_pos, border_radius = 2)
             pygame.draw.rect(win, purple, restart_button_pos, border_radius = 2 )
             game_over_text = game_font.render("Game Over!!!", True, white)
-            over_score_text = game_font.render(f'Score:{score}', True, white)
+            over_score_text = game_font.render(f'Score: {score}', True, white)
             quit_text = small_game_font.render('Quit', True, white)
             restart_text = small_game_font.render('Restart', True, white)
             win.blit(game_over_text, (int(width * 1/5), int(height *1/5)))
@@ -489,12 +489,12 @@ shapes = [new_shape(), new_shape(), new_shape(), new_shape()]
 
 
 #Initiates the window, sets window size and title, and calls the game loop
-height = 500
-width_ex = int(height* 1/5)
+height = 600
+width_ex = int(height* 1/4)
 width = int(height* 1/2)
 pygame.init()
-game_font = pygame.font.Font(f"New_Tegomin/NewTegomin-Regular.ttf", int(0.04*height))
-small_game_font=pygame.font.Font(f'New_Tegomin/NewTegomin-Regular.ttf', int(0.02*height))
+game_font = pygame.font.Font(f"tetris/Tetris-Font/Tetris.ttf", int(0.08*width))
+small_game_font=pygame.font.Font(f'tetris/Tetris-Font/Tetris.ttf', int(0.04*width))
 win = pygame.display.set_mode((int(height/2 + width_ex), height))
 pygame.display.set_caption("Tetris")
 game_loop()
