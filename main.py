@@ -170,6 +170,7 @@ def clear_rows():
       global grid
       global new_grid
       global score
+      global lines
       cleared_rows = False
       for row in range(20):
             clear_row = True
@@ -177,7 +178,8 @@ def clear_rows():
                   if grid[row][col] == 0:
                         clear_row = False
             if clear_row: 
-                  score =score +100
+                  score +=100
+                  lines +=1
                   grid[row,:] = np.zeros((1,10), dtype='int8')
                   new_grid = np.zeros((20,10), dtype='int8')
                   for sub_row in range(row):
@@ -315,8 +317,16 @@ def create_screen():
 
       pygame.draw.rect(win, black, (width, 0, width_ex, height), border_radius = 2)
 
-      score_text = game_font.render(f'Score: {score}', True, white)
+      score_text = game_font.render(f'Score:', True, white)
+      score_score = game_font.render(f'{score}', True, white)
       win.blit(score_text, (width ,0))
+      win.blit(score_score, (width, height*0.05))
+
+      level_text = game_font.render(f'Level: {level}', True, white)
+      win.blit(level_text, (width ,(int(2/7*height)+width_ex*2)))
+
+      lines_text = game_font.render(f'Lines: {lines}', True, white)
+      win.blit(lines_text, (width ,(int(2/7*height)+width_ex*2 +height*0.05)))
       
       upcoming_text = game_font.render(f'Upcoming', True, white)
       win.blit(upcoming_text, (width,int(height/7)))
@@ -399,6 +409,7 @@ def game_loop():
       global grid
       global score
       global run
+      global level
       rows = np.array([0,4])
       cols = np.array([2,6])
       run = True
@@ -406,7 +417,8 @@ def game_loop():
       earlier =time.perf_counter()
       while run:   
             now = time.perf_counter()
-            if now - earlier >=0.75:
+            level = int(lines/10 + 1)
+            if now - earlier >=0.80 - (level*0.05):
                   rows +=1
                   earlier = now
             grid[:,:] = new_grid
@@ -441,7 +453,7 @@ def game_loop():
                               rows = np.array([0,4])
                               cols = np.array([2,6])
                               rot = 0
-     
+            
             win.fill(bkgrd_grey)
             if draw_shape(shapes[0][rot], rows, cols, grid):
                   rows = np.array([0,4])
@@ -462,6 +474,8 @@ bkgrd_grey = (54,54,54)
 
 #Establishes some nesscary global varibables, like the grid and the score
 score = 0
+level = 1
+lines=0
 grid= np.zeros((20,10), dtype='int8')
 new_grid = grid.copy()
 upcoming_grid = np.zeros((10,5), dtype='int8')
@@ -507,8 +521,8 @@ shapes = [new_shape(), new_shape(), new_shape(), new_shape()]
 height = 600
 width_ex = int(height* 1/5)
 width = int(height* 1/2)
-game_font = pygame.font.Font(f"tetris/Tetris-Font/Tetris.ttf", int(0.08*width))
-small_game_font=pygame.font.Font(f'tetris/Tetris-Font/Tetris.ttf', int(0.04*width))
+game_font = pygame.font.Font(f"tetris/Recursive/static/Recursive/Recursive-SemiBold.ttf", int(0.075*width))
+small_game_font=pygame.font.Font(f'tetris/Recursive/static/Recursive/Recursive-SemiBold.ttf', int(0.04*width))
 win = pygame.display.set_mode((int(width + width_ex), height))
 
 
