@@ -1,0 +1,28 @@
+.form-signin {
+  width:25%;
+  text-align: center;
+  margin: auto;
+  
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.parent{
+  height: 80%;
+  display: flex;
+   justify-content: center;
+   align-items:center;
+}
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

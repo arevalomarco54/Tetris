@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='signup.css')}}"/>
+  <div class="parent">
+  <main class="form-signin pt-3 pb-3">
+    <form method="POST" action="">
+      {{form.hidden_tag()}}
+      <h1 class="h3 mb-3 fw-normal">Create Account</h1>
+      <div class="form-floating">
+        {{form.email( type = "email", class="form-control", placeholder="name@example.com")}}
+        {{form.email.label()}}
+      </div>
+      <div class="form-floating">
+        {{form.username(  class="form-control", placeholder="name@example.com")}}
+        {{form.username.label()}}
+      </div>
+      <div class="form-floating">
+        {{form.password( id="password", type="password", class="form-control", placeholder="name@example.com")}}
+        {{form.password.label()}}
+      </div>
+      <div class="form-floating mb-3">
+        {{form.confirm_password( id="confirm_password", type="password",class="form-control", placeholder="name@example.com")}}
+        {{form.confirm_password.label()}}
+      </div>
+      <div class="form-floating">
+      {{form.submit(class="w-100 btn btn-lg btn-primary")}}
+    </div>
+    </form>
+    <div class="border-top pt-3">
+      <small class="text-muted">
+          Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
+      </small>
+  </div>
+  </main>
+</div>
+  <script>
+    const confirm_password = document.getElementById("confirm_password");
+    const password = document.getElementById("password");
+    
+    confirm_password.addEventListener("input", function (event) {
+    if (confirm_password.value != password.value) {
+      confirm_password.setCustomValidity( "Passwords Are Different");
+    } else{
+      confirm_password.setCustomValidity("");
+    }
+});
+  </script>
+{%endblock content%}
